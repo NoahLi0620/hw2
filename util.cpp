@@ -16,7 +16,30 @@ std::string convToLower(std::string src)
 std::set<std::string> parseStringToWords(string rawWords)
 {
 
-
+rawWords=convToLower(rawWords);
+set<string> outW;
+string part;
+for(int i=0;i<rawWords.size();i++)
+{
+	unsigned char unit=static_cast<unsigned char>(rawWords[i]);
+	if(isalnum(unit))
+	{
+		part.push_back(rawWords[i]);
+	}
+	else
+	{
+		if(part.size()>=2)
+		{
+			outW.insert(part);
+		}
+		part.clear();
+	}
+}
+if(part.size()>=2)
+{
+	outW.insert(part);//make sure we put the last part into the set
+}
+return outW;
 
 
 
