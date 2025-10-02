@@ -36,7 +36,7 @@ void MyDataStore::indexProduct_(Product*p)
     std::set<std::string>::iterator it=key.begin();
     while(it!=key.end())
     {
-        index_[*it].insert(p);
+        index_[convToLower(*it)].insert(p);
         ++it;
     }
 }
@@ -101,8 +101,17 @@ std::vector<Product*> MyDataStore::search(std::vector<std::string>& terms, int t
             }
         }
     }
-    lasthit_.assign(Rset.begin(),Rset.end());
-    return lasthit_;
+    std::map<std::string, Product*> order;
+		for(std::set<Product*>::iterator it4=Rset.begin();it4!=Rset.end();++it4)
+		{
+			order[(*it4)->getName()]=*it4;
+		}
+		lasthit_.clear();
+		for(std::map<std::string, Product*>::iterator itN=order.begin();itN!=order.end();++itN)
+		{
+			lasthit_.push_back(itN->second);
+		}
+		return lasthit_;
 }
 
 bool MyDataStore::addToCart(std::string username, int id)
@@ -111,7 +120,7 @@ bool MyDataStore::addToCart(std::string username, int id)
     {
         return false;
     }
-    if(id<=0||static_cast<size_t>(id)>lasthit_.size())
+    if(id<=0||static_cast<size_t>((id)-1)>lasthit_.size())
     {
         return false;
     }
@@ -128,7 +137,7 @@ bool MyDataStore::viewCart(std::string username, std::ostream& os)
     const std::deque<Product*>& dq=it->second;
     for(size_t i=0; i<dq.size();++i)
     {
-        os<<"Item "<<i<<"\n";
+        os<<"Item "<<(i+1)<<"\n";
         os<<dq[i]->displayString()<<"\n\n";
     }
     return true;
