@@ -120,11 +120,11 @@ bool MyDataStore::addToCart(std::string username, int id)
     {
         return false;
     }
-    if(id<=0||static_cast<size_t>((id)-1)>lasthit_.size())
+    if(id<1||id>static_cast<int>(lasthit_.size()))
     {
         return false;
     }
-    cart_[username].push_back(lasthit_[id]);
+    cart_[username].push_back(lasthit_[static_cast<size_t>(id)-1]);
     return true;
 }
 bool MyDataStore::viewCart(std::string username, std::ostream& os)
