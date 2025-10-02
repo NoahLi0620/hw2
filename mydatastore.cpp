@@ -1,7 +1,6 @@
 #include "mydatastore.h"
 #include <set>
 #include<iostream>
-#include<algorithm>
 #include"util.h"
 #include<map>
 #include<deque>
@@ -141,8 +140,13 @@ bool MyDataStore::buyCart(std::string username)
     {
         return false;
     }
-    User* user=it->second;
-    std::deque<Product*>& dq=cart_[username];
+		std::map<std::string,User*>::iterator it2=userlist_.find(username);
+    if(it2==userlist_.end())
+		{
+			return false;
+		}
+		User* user=it2->second;
+    std::deque<Product*>& dq=it->second;
     std::deque<Product*> remaining;
     for(size_t i=0;i<dq.size();++i)
     {
