@@ -186,7 +186,7 @@ std::string ProductClothingParser::categoryID()
  */
 Product* ProductClothingParser::makeProduct()
 {
- Clothing* mp=new Book(prodName_,price_,qty_,size_,brand_);
+ Clothing* mp=new Clothing(prodName_,price_,qty_,size_,brand_);
 	return mp;
 
 

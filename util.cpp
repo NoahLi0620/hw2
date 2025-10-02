@@ -19,7 +19,7 @@ std::set<std::string> parseStringToWords(string rawWords)
 rawWords=convToLower(rawWords);
 set<string> outW;
 string part;
-for(int i=0;i<rawWords.size();i++)
+for(size_t i=0;i<rawWords.size();i++)
 {
 	unsigned char unit=static_cast<unsigned char>(rawWords[i]);
 	if(isalnum(unit))

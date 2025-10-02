@@ -2,7 +2,12 @@
 #include <set>
 #include<iostream>
 #include<algorithm>
-
+#include"util.h"
+#include<map>
+#include<deque>
+#include<vector>
+#include<string>
+#include<ostream>
 
 MyDataStore::MyDataStore()
 {
@@ -11,7 +16,7 @@ MyDataStore::MyDataStore()
 
 MyDataStore::~MyDataStore()
 {
-    for(int i=0; i<prolist_.size();++i)
+    for(size_t i=0; i<prolist_.size();++i)
     {
         delete prolist_[i];
     }
@@ -54,7 +59,7 @@ void MyDataStore::addUser(User* u)
         return;
     }
     userlist_[u->getName()]=u;
-    if(cart_.find(u->getName())==cart.end())
+    if(cart_.find(u->getName())==cart_.end())
     {
         cart_[u->getName()]=std::deque<Product*>();
     }
@@ -68,15 +73,15 @@ std::vector<Product*> MyDataStore::search(std::vector<std::string>& terms, int t
     }
     if(type==0)
     {
-        std::map<std::string,std::set<Product*>>::iterator it1=index_.find(terms[0])
-        if(it0==index_.end())
+        std::map<std::string,std::set<Product*>>::iterator it1=index_.find(terms[0]);
+        if(it1==index_.end())
         {
             return lasthit_;
         }
         Rset=it1->second;
-        for(size_t i=1;i<q.size()&&!Rset.empty();++i)
+        for(size_t i=1;i<terms.size()&&!Rset.empty();++i)
         {
-            std::map<std::string, std::set<Product*>>::iterator it2=index_.find(q[i]);
+            std::map<std::string, std::set<Product*>>::iterator it2=index_.find(terms[i]);
             if(it2==index_.end())
             {
                 Rset.clear();
@@ -88,9 +93,9 @@ std::vector<Product*> MyDataStore::search(std::vector<std::string>& terms, int t
     }
     else
     {
-        for(size_t i=0;i<q.size();++i)
+        for(size_t i=0;i<terms.size();++i)
         {
-            std::map<std::string, std::set<Product*>>::iterator it3=index_.find(q[i]);
+            std::map<std::string, std::set<Product*>>::iterator it3=index_.find(terms[i]);
             if(it3!=index_.end())
             {
                 Rset=setUnion(Rset, it3->second);
@@ -136,13 +141,13 @@ bool MyDataStore::buyCart(std::string username)
     {
         return false;
     }
-    User* user=uit->second;
+    User* user=it->second;
     std::deque<Product*>& dq=cart_[username];
     std::deque<Product*> remaining;
     for(size_t i=0;i<dq.size();++i)
     {
         Product* p=dq[i];
-        if(p->getQty())>0&&user->getBalance()>=p->getPrice())
+        if(p->getQty()>0&&user->getBalance()>=p->getPrice())
         {
             user->deductAmount(p->getPrice());
             p->subtractQty(1);
